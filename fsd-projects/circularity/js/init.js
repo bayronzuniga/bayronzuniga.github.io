@@ -15,45 +15,55 @@ var init = function (window) {
         window.opspark.game = {};
         var game = window.opspark.game;
         
-        ///////////////////
-        // PROGRAM SETUP //
-        ///////////////////
+        ////////////////////////////////////////////////////////////
+        ///////////////// PROGRAM SETUP ////////////////////////////
+        ////////////////////////////////////////////////////////////
         
         // TODO 1 : Declare and initialize our variables
-
-
+        var circle; // variable that will hold a single circle when creating circles
+        var circles = []; // variable to store all circles in one Array
 
         // TODO 2 : Create a function that draws a circle 
-        
+        function drawCircle() {
+            circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);
+            physikz.addRandomVelocity(circle, canvas, 2.5, 2.5);
+            view.addChild(circle);
+            circles.push(circle);
+        }
 
+        // TODO 3 / 7 : Call the drawCircle() function 
+    
+        for (var i = 0; i < 100; i++) {
+            drawCircle();
+        }
 
-        // TODO 3 : Call the drawCircle() function
-
-
-
-        // TODO 7 : Use a loop to create multiple circles
-
-
-
-
-        ///////////////////
-        // PROGRAM LOGIC //
-        ///////////////////
+        ////////////////////////////////////////////////////////////
+        ///////////////// PROGRAM LOGIC ////////////////////////////
+        ////////////////////////////////////////////////////////////
         
         /* 
-        This Function is called 60 times/second, producing 60 frames/second.
+        This Function is called 60 times/second producing 60 frames/second.
         In each frame, for every circle, it should redraw that circle
         and check to see if it has drifted off the screen.         
         */
         function update() {
-            // TODO 4 : Update the position of each circle using physikz.updatePosition()
+            // TODO 4 : Update the circle's position //
+            // Deleted: Moved code block to TODO 9
 
+            // TODO 5 / 10 : Call game.checkCirclePosition() on your circles. 
+            // Deleted: Moved code block to TODO 9
+
+            // TODO 9 : Iterate over the array
+
+            // Update the circle's position
+            for ( var aCircle in circles) {
+                physikz.updatePosition(circles[aCircle]);
+               }
             
-            // TODO 5 : Call game.checkCirclePosition() on your circles
-           
-
-            // TODO 8 / TODO 9 : Iterate over the array
-           
+            // Call game.checkCirclePosition() on your circles.
+            for ( var aCircle in circles) {
+                game.checkCirclePosition(circles[aCircle]);
+            }
             
         }
     
@@ -64,15 +74,37 @@ var init = function (window) {
         */
         game.checkCirclePosition = function(circle) {
 
-            // if the circle has gone past the RIGHT side of the screen then place it on the LEFT
+            // if the circle has gone past the RIGHT side of the screen
+            // then place it on the LEFT
             if ( circle.x > canvas.width ) {
                 circle.x = 0;
             }
-            
+
             // TODO 6 : YOUR CODE STARTS HERE //////////////////////
+
+            // if the circle has gone past the LEFT side of the screen
+            // then place it on the RIGHT
+            if ( circle.x < 0 ) {
+                circle.x = canvas.width;
+            }
+
+            // if the circle has gone past the TOP side of the screen
+            // then place it on the BOTTOM
+            if ( circle.y < 0 ) {
+                circle.y = canvas.height;
+            }
+
+            // if the circle has gone past the BOTTOM side of the screen
+            // then place it on the TOP
+            if ( circle.y > canvas.height ) {
+                circle.y = 0;
+            }
+
             
-
-
+            if ( circle.x > canvas.width ) {
+                circle.x = 0;
+            }
+        
             // YOUR TODO 6 CODE ENDS HERE //////////////////////////
         }
         
@@ -92,7 +124,7 @@ var init = function (window) {
     }
 };
 
-// DO NOT REMOVE THIS CODE //////////////////////////////////////////////////////
+// DON'T REMOVE THIS CODE //////////////////////////////////////////////////////
 if((typeof process !== 'undefined') &&
     (typeof process.versions.node !== 'undefined')) {
     // here, export any references you need for tests //
